@@ -18,7 +18,7 @@ Class Database
             echo $e->getMessage();
             die;
         }
-        return false;
+        return true;
 
         
     }
