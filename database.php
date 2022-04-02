@@ -25,7 +25,7 @@ Class Database
         
     }
 
-    write to database
+    //write to database
     public function write($query,$data_array = [])
     {
         $con=$this->connect(); 
