@@ -2,5 +2,6 @@
 require_once("classes/autoload.php");
 $DB=new Database();
 
-$data=file_get_contents("php://input");
-$data=json_decode($data);
+$DATA_RAW=file_get_contents("php://input");
+$DATA_OBJ=json_decode($data);
+//process the data
