@@ -89,12 +89,12 @@
     <div id="wrapper">
         <div id="left_pannel">
 
-            <div style="padding:10px;">
-                <img id="profile_image" src="ui/images/user3.jpg">
+            <div id="user_info" style="padding:10px;">
+                <img id="profile_image" src="ui/images/user_male.jpg">
                 <br>
-                Kelly Hartmann
+                <span id="username">Username</span>
                 <br>
-                <span style="font-size:12px;opacity:0.5;">kellyhartman@gmail.com</span>
+                <span id="email" style="font-size:12px;opacity:0.5;">email@gmail.com</span>
 
                 <br>
                 <br>
@@ -132,20 +132,37 @@
     function _(element){
         return document.getElementById(element);
     }
-    function read_data(){
-        var inner_pannel = _("inner_left_pannel");
+    function get_data(find,type){
+        var xml=new XMLHttpRequest();
+        xml.onlaod=function(){
+            if(xml.readyState ==4 || xml.status == 200){
+                handle_result(xml.responseText,type);
+            }
+
+        }
+        var data={};
+        data.find=find;
+        data.data_type=type;
+        data=JSON.stringify(data);
+        xml.open("POST","api.php",true);
+        xml.send(data);
+        
     }
-    var label = _("label_chat");
-    label.addEventListener("click",function(){
-        var inner_pannel = _("inner_left_pannel");
-        var ajax=new XMLHttpRequest();
-        ajax.onload=function(){
-            if(ajax.status ==200 || ajax.readyState ==4){
-                inner_pannel.innerHTML =ajax.responseText;
+    function handle_result(result,type){
+        
+        if(result.trim()!=""){
+
+        
+            var obj=JSON.parse(result);
+            if(!obj.logged_in){
+                window.location="login.php";
+            }else{
+                alert(result); 
             }
         }
-        ajax.open("POST","file.php",true);
-        ajax.send();
-    });
+        
+    }
+    get_data({},"user_info");
+    
      
 </script>

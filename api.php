@@ -1,25 +1,27 @@
 <?php
+session_start();
+//checked if logged in
+$info=(object)[];
+if(!isset($_SESSION['userid'])){
+    $info->logged_in = false;
+    echo json_encode($info);
+    die;
+}
 require_once("classes/autoload.php");
 $DB=new Database();
 
 $DATA_RAW=file_get_contents("php://input");
 $DATA_OBJ=json_decode($DATA_RAW);
+$Error = "";
+
 //process the data
 if(isset($DATA_OBJ->data_type) && $DATA_OBJ->data_type == "signup")
 {
     //signup
-    $data=false;
-    $data['userid']=$DB->generate_id(20);
-    $data['username']=$DATA_OBJ->username;
-    $data['email']=$DATA_OBJ->email;
-    $data['password']=$DATA_OBJ->password;
-    $data['date']=date("Y-m-d H:i:s");
+    
+    include("includes/signup.php");
 
-    $query ="insert into users (userid,username,email,password,date) values (:userid,:username,:email,:password,:date)";
-    $result=$DB->write($query,$data);
-    if($result){
-        echo "your profile was created";
-    }else{
-        echo "not created";
-    }
+}else if(isset($DATA_OBJ->data_type) && $DATA_OBJ->data_type == "user_info"){
+    echo "user_info";
+
 }
