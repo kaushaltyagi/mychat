@@ -28,14 +28,14 @@
         width:100%;
         max-width:400px;
     }
-    input[type=text],input[type=password],input[type=button]{
+    input[type=text],input[type=password],input[type=submit]{
         padding:10px;
         margin:10px;
         width:98%;
         border-radius:5px;
         border:solid 1px grey;
     }
-    input[type=button]{
+    input[type=submit]{
 
         width:103%;
         cursor:pointer;
@@ -69,28 +69,23 @@
     <div id="wrapper">
         <div id="header">
             My Chat
-            <div style="font-size:20px; font-family:myFont;">Signup</div>
+            <div style="font-size:20px; font-family:myFont;">Login</div>
         </div>
         <div id="error" style=""></div>  
 
 
         <form id="myform">
-            <input type="text" name="username" placeholder="Username"><br>
+            
             <input type="text" name="email" placeholder="Email"><br>
             
-            <div style="padding:10px;">
-                <br>Gender:<br>
-                <input type="radio" value="Male" name="gender"> Male<br>
-                <input type="radio" value="Female" name="gender"> Female<br>
-            </div>
             <input type="password" name="password" placeholder="Password"><br>
-            <input type="password" name="password2" placeholder="Retype Password"><br>
-            <input type="button" value="Sign up" id="signup_button"><br>
-            <br>
-            <a href="login.php" style="display:block;text-align:center;text-decoration:none">
-                Already  have an account?login here
-            </a>
+            
+            <input type="submit" value="Login" id="login_button"><br>
 
+            <br>
+            <a href="signup.php" style="display:block;text-align:center;text-decoration:none">
+                Don't have an account?Signup here
+            </a>
         </form>
        
     </div>
@@ -102,11 +97,12 @@
     function _(element){
         return document.getElementById(element);
     }
-    var signup_button=_("signup_button");
-    signup_button.addEventListener("click",collect_data);
-    function collect_data(){
-        signup_button.disabled=true;
-        signup_button.value="Loading ... Please wait ..";
+    var login_button=_("login_button");
+    login_button.addEventListener("click",collect_data);
+    function collect_data(e){
+        e.preventDefault();
+        login_button.disabled=true;
+        login_button.value="Loading ... Please wait ..";
 
 
         var myform=_("myform");
@@ -118,28 +114,19 @@
 
             switch(key){
 
-                case "username":
-                    data.username=inputs[i].value;
-                    break;
                 case "email":
                     data.email=inputs[i].value;
                     break;
-                case "gender":
-                    if(inputs[i].checked){
-                        data.gender=inputs[i].value;
-                    }
-                    break;
+               
 
                 case "password":
                     data.password=inputs[i].value;
                     break;
 
-                case "password2":
-                    data.password2=inputs[i].value;
-                    break;
+              
             }
         }
-         send_data(data,"signup");
+         send_data(data,"login");
          
 
 
@@ -148,32 +135,31 @@
     }
     function send_data(data,type){
         var xml=new XMLHttpRequest();
+
         xml.onload=function(){
+
             if(xml.readyState==4 || xml.status ==200){
+
                 handle_result(xml.responseText);
-                signup_button.disabled=false;
-                signup_button.value="Signup";
+                login_button.disabled=false;
+                login_button.value="Login";
             }
         }
-            data.data_type=type;
-            var data_string=JSON.stringify(data);
+            data.data_type = type;
+            var data_string = JSON.stringify(data);
             xml.open("POST","api.php",true);
             xml.send(data_string);
-            //xml.send(data);
-            function handle_result(result){
-                var data=JSON.parse(result);
-                if(data.data_type=="info"){
-                    window.location= "index.php";
-                }else{
-                    var error=_("error");
-                    error.innerHTML=data.message;
-                    error.style.display="block";
+    }
+            
+    function handle_result(result){
+            var data = JSON.parse(result);
+            if(data.data_type == "info"){
+                window.location= "index.php";
+            }else{
+                var error=_("error");
+                error.innerHTML=data.message;
+                error.style.display="block";
 
                 }
-            }
-
-        
-    }
-   
-     
+            }   
 </script>
