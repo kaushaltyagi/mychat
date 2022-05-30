@@ -1,7 +1,8 @@
 <?php
+
 $info = (Object)[];
 
-$data=false;
+    $data=false;
    
     //validate info
     
@@ -19,12 +20,14 @@ $data=false;
     
    
    
-    if($Error == ""){
+    if($Error == "")
+    {
             
 
         $query ="select * from users where email =:email limit 1";
         $result=$DB->read($query,$data);
-        if(is_array($result)){
+        if(is_array($result))
+        {
             
             $result=$result[0];
             if($result->password == $DATA_OBJ->password)

@@ -63,6 +63,7 @@
         font-size:40px;
         text-align:center;.
         font-family:headFont;
+        position:relative
         
     }
     #inner_left_pannel{
@@ -81,6 +82,30 @@
     }
     #radio_settings:checked ~ #inner_right_pannel{
         flex:0;
+    }
+    #contact{
+        width: 100px;
+        height:120px;
+        margin:10px;
+        display:inline-block;
+        vertical-align:top;
+        
+        
+
+    }
+
+    #contact img{
+        width:100px;
+        height:100px;
+        
+    }
+    .loader_on{
+        position:absolute;
+       
+        width:30%;
+    }
+    .loader_off{
+        display:none;
     }
 
     
@@ -110,9 +135,14 @@
         </div>
 
         <div id="right_pannel">
-            <div id="header"> My Chat </div>
+            <div id="header">
+            <div id="loader_holder" class="loader_on" ><img style="width:70px;" src="ui/icons/giphy.gif"></div>
+                 My Chat
+                 </div>
             <div id="container" style="display:flex;">
+            
                 <div id="inner_left_pannel">
+                    
                 </div>
                 <input type="radio" id="radio_chat" name="myradio" style="display:none;">
                 <input type="radio" id="radio_contacts" name="myradio" style="display:none;">
@@ -135,12 +165,25 @@
     function _(element){
         return document.getElementById(element);
     }
+    var label_contacts=_("label_contacts");
+    label_contacts.addEventListener("click",get_contacts);
+
+    var label_chat=_("label_chat");
+    label_chat.addEventListener("click",get_chats);
+
+    var label_settings=_("label_settings");
+    label_settings.addEventListener("click",get_settings);
+
     var logout=_("logout");
     logout.addEventListener("click",logout_user);
     function get_data(find,type){
         var xml=new XMLHttpRequest();
+        var loader_holder =_("loader_holder");
+        loader_holder.className ="loader_on";
         xml.onlaod=function(){
             if(xml.readyState ==4 || xml.status == 200){
+                loader_holder.className ="loader_off";
+
                 handle_result(xml.responseText,type);
             }
 
@@ -159,11 +202,12 @@
 
         
             var obj=JSON.parse(result);
-            if(typeof(obj.logged_in)!="undefined" && !obj.logged_in){
+            if(typeof(obj.logged_in) !="undefined" && !obj.logged_in){
                 window.location="login.php";
             }else{
                 
                 switch(obj.data_type){
+                    
                     case "user_info":
                         var username=_("username");
                         var email=_("email");
@@ -171,13 +215,35 @@
                         email.innerHTML=obj.email;
                         break; 
                     case "contacts":
-                        break;       
+                        var inner_left_pannel=_("inner_left_pannel");
+                        
+                       
+                        inner_left_pannel.innerHTML=obj.message;
+
+                        break;   
+                    case "chats":
+                        var inner_left_pannel=_("inner_left_pannel");
+                        
+                       
+                        inner_left_pannel.innerHTML=obj.message;
+
+                        break;   
+                    
+                    case "settings":
+                        var inner_left_pannel=_("inner_left_pannel");
+                        
+                       
+                        inner_left_pannel.innerHTML=obj.message;
+
+                        break;  
+                           
                 } 
                 
             }
         }
-        
-    }
+    
+    }    
+    
     function logout_user()
     {
         var answer=confirm("Are you you want to logout?? ");
@@ -186,6 +252,21 @@
         }
     }
     get_data({},"user_info");
+    function get_contacts(e){
+        get_data({},"contacts");
+
+
+    }
+    function get_chats(e){
+        get_data({},"chats");
+
+
+    }
+    function get_settings(e){
+        get_data({},"settings");
+
+
+    }
     
      
 </script>

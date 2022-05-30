@@ -37,3 +37,16 @@ elseif(isset($DATA_OBJ->data_type) && $DATA_OBJ->data_type == "user_info"){
    // user info
    include("includes/user_info.php");
 }
+elseif(isset($DATA_OBJ->data_type) && $DATA_OBJ->data_type == "contacts"){
+    // user info
+    include("includes/contacts.php");
+}
+elseif(isset($DATA_OBJ->data_type) && $DATA_OBJ->data_type == "chats"){
+    // user info
+    include("includes/chats.php");
+}
+elseif(isset($DATA_OBJ->data_type) && $DATA_OBJ->data_type == "settings"){
+    // user info
+    include("includes/settings.php");
+}
+
